@@ -6,8 +6,6 @@ import Notes from './components/Notes';
 import CreateNote from './components/CreateNote';
 import auth from './static';
 
-console.log(auth)
-
 const instance = axios.create({
   baseURL: 'https://api.productive.io/api/v2',
   data: {},
