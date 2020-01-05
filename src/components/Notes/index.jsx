@@ -25,7 +25,9 @@ const NotesWrapper = styled.div`
 `
 
 const Notes = ({ data, deleteNote, loading }) => {
-  const loadedContent = data.map(el => (<Note {...el} key={el.id} deleteNote={deleteNote} />));
+  const loadedContent = data.length > 0
+    ? data.map(el => (<Note {...el} key={el.id} deleteNote={deleteNote} />))
+    : 'Time entries is empty';
   const content = loading ? <div>Loading...</div> : loadedContent;
 
   return (
