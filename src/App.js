@@ -17,11 +17,32 @@ const instance = axios.create({
   }
 })
 
-const Wrapper = styled.div`
+const ContentWrapper = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: noWWrap;
-  justify-content: space-evenly;
+  max-width: 1268px;
+  height: 100vh;
+  max-height: 100vh;
+  margin: auto;
+  background: #fafcfc;
+
+  @media only screen and (max-width: 600px) {
+    flex-direction: column;
+    width: 100%;
+  }
+`
+
+const Wrapper = styled.div`
+  display: flex;
+  width: 50%;
+  padding: 20px 0 0;
+  background: ${props => props.color ? props.color : "inherit"};
+
+  @media only screen and (max-width: 600px) {
+    width: 100%;
+    height: auto;
+  }
 `
 
 class App extends PureComponent {
@@ -42,7 +63,7 @@ class App extends PureComponent {
     try {
       this.setState({ loading: true })
       const data = await instance.get('/time_entries', { data: {} });
-      const formatedData = data.data.data.map(({ id, attributes: { date, note, name, time } }) => {
+      const formatedData = data.data.data.map(({ id, attributes: { date, note, time } }) => {
         return { id, date, note, time };
       });
       this.setState({ data: formatedData, loading: false });
@@ -59,7 +80,6 @@ class App extends PureComponent {
         "attributes": {
           "note": `${note}`,
           "date": "2020-10-01",
-          "name": "somethingElse",
           "time": `${time}`,
         },
         "relationships": {
@@ -84,7 +104,7 @@ class App extends PureComponent {
 
     try {
       this.setState({ loading: true });
-      await instance.post('/time_entries', newNote);  //POST RADIIIIIIIIIIIIII
+      await instance.post('/time_entries', newNote);
       this.handleGetNotes();
     } catch (e) {
       console.log(e);
@@ -117,10 +137,14 @@ class App extends PureComponent {
     const { data, loading } = this.state
 
     return (
-      <Wrapper>
-        <CreateNote createNote={this.handleCreateNote} />
-        <Notes data={data} deleteNote={this.handleDeleteNote} loading={loading} />
-      </Wrapper>
+      <ContentWrapper>
+        <Wrapper>
+          <CreateNote createNote={this.handleCreateNote} />
+        </Wrapper>
+        <Wrapper color='#cfcfcf'>
+          <Notes data={data} deleteNote={this.handleDeleteNote} loading={loading} />
+        </Wrapper>
+      </ContentWrapper>
     );
   }
 }
